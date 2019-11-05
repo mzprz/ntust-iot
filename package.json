@@ -1,0 +1,15 @@
+{
+  "name": "ntust-iot",
+  "version": "1.0.0",
+  "description": "Repo for NTUST Competition Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Prasetyo W. and Team",
+  "license": "ISC",
+  "dependencies": {
+    "mosca": "^2.8.3",
+    "mqtt": "^3.0.0"
+  }
+}
