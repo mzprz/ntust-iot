@@ -2,20 +2,26 @@ import json
 import paho.mqtt.client as mqtt
 import numpy as np
 from datetime import datetime
+import time as tm
 # datetime object containing current date and time
 
 
 # some variables
-last_status = 0
+last_status = [0,0,0,0]
+client = mqtt.Client("Camera")
+client.connect(
+    host='localhost',
+    port=1884
+)
 
 # LOOP
-status = 1
+while True:
+    status = np.random.randint(0, high=2)
+    area = np.random.randint(1, high=5)
 
-if last_status != status:
     now = datetime.now()
     date = now.strftime("%d-%m-%Y")
     time = now.strftime("%H:%M:%S")
-    area = np.random.randint(1, high=5)
     filename = now.strftime("%d%m-%H:%M") + '(' + str(area) + ').mp4'
 
     payload = {
@@ -28,12 +34,9 @@ if last_status != status:
 
     payload_json = json.dumps(payload)
 
-    # MQTT STUFF
-    client = mqtt.Client("Camera")
-    client.connect(
-        host='localhost',
-        port=1884
-    )
-    client.publish('dataAlert', payload_json)
-    print(payload_json)
-    last_status = status
+
+    if last_status[area-1] != status:
+        print(payload_json)
+        client.publish('dataAlert', payload_json)
+        last_status[area-1] = status
+    tm.sleep(1)
