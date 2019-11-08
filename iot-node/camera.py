@@ -4,15 +4,41 @@ import numpy as np
 import time as tm
 from datetime import datetime
 
-# INIT
-last_status = [0,0,0,0]
+# ===========================================================
+## FUNCTIONS DECLARATION
+# ===========================================================
+
+# Function to Init Status
+def initStatus():
+    for area in range(len(last_status)):
+        payload = {
+            'area': area+1,
+            'status': last_status[area]
+        }
+        payload_json = json.dumps(payload)
+        client.publish('dataAlert', payload_json)
+    print("Init Success")
+
+# ===========================================================
+## MAIN PROGRAM
+# ===========================================================
+
+## 1. INIT
+
+# a. Init MQTT
 client = mqtt.Client("Camera")
 client.connect(
     host='localhost',
     port=1884
 )
 
-# LOOP
+# b. Init Status
+last_status = [0,0,0,0]
+initStatus()
+
+# -----------------------------------------------------------
+
+## 2. LOOP
 while True:
     # Data hasil image processing
     status = np.random.randint(0, high=2)
@@ -42,3 +68,5 @@ while True:
 
     # Delay
     tm.sleep(1)
+
+# -----------------------------------------------------------
