@@ -86,13 +86,14 @@ function updateStatus(messageAll){
 
 client.on('message', function(topic, message) {
     //console.log('received message on %s: %s', topic, message)
+    message = JSON.parse(message.toString())
     switch (topic) {
         case 'allData':
-            updateTable(JSON.parse(message.toString()));
+            updateTable(message);
+            totalData = message; // Untuk export2csv
             break;
         case 'allStatus':
-            meall = JSON.parse(message.toString());
-            updateStatus(JSON.parse(message.toString()));
+            updateStatus(message);
             break;
     }
 })
