@@ -59,8 +59,12 @@ server.on('ready', function() {
     console.log('-------------------------------')
     console.log('')
 
-    con.query('select * from `log-alert`;', function(err, results, fields) {
+    con.query('select * from `log-alert`', function(err, results, fields) {
       client.publish('allData', JSON.stringify(results), {retain:true})
+    });
+
+    con.query('SELECT * FROM `area-status`', function(err, results, fields) {
+      client.publish('allStatus', JSON.stringify(results), {retain:true});
     });
 })
 
@@ -93,12 +97,24 @@ client.on('message', function(topic, message) {
     message = JSON.parse(message.toString())
     switch (topic) {
         case 'dataAlert':
+            updateData(message);
             if(message.status){
                 newData(message);
             }
             break;
     }
 })
+
+function updateData(message){
+  var sql = "UPDATE `area-status` SET `status`={} WHERE `area`={}".format(message.status, message.area);
+  con.query(sql, function(err, result) {
+      if (err) throw err;
+      console.log("area " + message.area + " status updated");
+  });
+  con.query('select * from `area-status`', function(err, results, fields) {
+    client.publish('allStatus', JSON.stringify(results), {retain:true});
+  });
+}
 
 function newData(message) {
     var sql = "INSERT INTO `log-alert` (`Date`, `Time`, `Area`, `Filename`) VALUES ( '{}', '{}', {}, '{}')".format(message.date, message.time, message.area, message.filename);
@@ -107,7 +123,7 @@ function newData(message) {
         console.log(message.filename + " inserted");
     });
 
-    con.query('select * from `log-alert`;', function(err, results, fields) {
+    con.query('select * from `log-alert`', function(err, results, fields) {
       client.publish('allData', JSON.stringify(results), {retain:true});
     });
 }

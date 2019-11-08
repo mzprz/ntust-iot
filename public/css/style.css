@@ -1,3 +1,18 @@
 .margin-top-10 {
   margin-top: 10px;
 }
+
+.area {
+  width: 10%;
+  background-color: #5cb85c;	/* #d9534f; */
+  margin: 2px;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.area_stat {
+  background-color: none;
+  /* color: white; */
+  margin: 2px;
+  text-align: center;
+}

@@ -27,14 +27,18 @@ var client = mqtt.connect();
 
 client.on('connect', function() {
     client.subscribe('dataAlert');
-    client.subscribe('allData')
+    client.subscribe('allData');
+    client.subscribe('allStatus');
 })
 
 client.on('message', function(topic, message) {
     //console.log('received message on %s: %s', topic, message)
+    message = JSON.parse(message.toString());
     switch (topic) {
         case 'dataAlert':
-            newData(JSON.parse(message.toString()));
+            if(message.status){
+                newData(message);
+            }
             break;
     }
 })

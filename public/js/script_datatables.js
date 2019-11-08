@@ -72,12 +72,27 @@ $(document).ready(function() {
     // console.log("ANCANG")
 });
 
+function updateStatus(messageAll){
+  for (i=0; i<messageAll.length; i++){
+    var message = messageAll[i];
+    var area_span = document.querySelector('#area'+message.Area);
+    if (message.Status){
+      area_span.style.backgroundColor = '#d9534f';
+    } else if (!message.Status) {
+      area_span.style.backgroundColor = '#5cb85c';
+    }
+  }
+}
+
 client.on('message', function(topic, message) {
     //console.log('received message on %s: %s', topic, message)
     switch (topic) {
         case 'allData':
             updateTable(JSON.parse(message.toString()));
-            totalData = JSON.parse(message.toString());
+            break;
+        case 'allStatus':
+            meall = JSON.parse(message.toString());
+            updateStatus(JSON.parse(message.toString()));
             break;
     }
 })
