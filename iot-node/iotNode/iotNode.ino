@@ -24,7 +24,7 @@ Servo myservo;
 DynamicJsonDocument root(1024);
 int pos = 0; // variable to store the servo position
 int stateAlarm = 0;
-bool clockwise;
+bool clockwise = true;
 /*****************************************************************/
 
 /************************ DEKLARASI FUNGSI ***********************/
@@ -67,17 +67,23 @@ void loop() {
         if(!stateAlarm) {
                 myservo.attach(pinServo);
                 myservo.write(pos);
+                delay(15);
                 if (clockwise) {
-                        pos += 1;
-                        if(pos>=180) {
-                                clockwise != clockwise;
+                        if (pos == 180){
+                          pos--;
+                          clockwise = false;
+                        } else {
+                          pos++;
                         }
                 } else {
-                        pos -= 1;
-                        if(pos<=0) {
-                                clockwise != clockwise;
-                        }
+                        if (pos == 0){
+                          pos++;
+                          clockwise = true;
+                          } else {
+                            pos--;
+                          }
                 }
+//                Serial.println(pos);
                 digitalWrite(pinAlarm, LOW);
         }
         else if(stateAlarm) {
