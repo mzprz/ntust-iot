@@ -1,0 +1,12 @@
+name: yolov3-cpu
+channels:
+  - defaults
+dependencies:
+  - python = 3.6
+  - tensorflow >= 1.10.0
+  - graphviz >= 2.40.1
+  - scikit-learn
+  - scikit-image
+  - pip:
+    - imutils==0.5.1
+    - opencv-python==3.4.3.18
