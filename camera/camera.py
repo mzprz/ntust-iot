@@ -47,7 +47,7 @@ def initStatus():
 # a. Init MQTT
 client = mqtt.Client("Camera")
 client.connect(
-    host='localhost',
+    host='192.168.43.242',
     port=1884
 )
 

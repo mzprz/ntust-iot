@@ -150,17 +150,17 @@ def draw_boxes(image, boxes, classes, scores, config, file_name=''):
     print(ratio_x)
     print(ratio_y)
     
-    x1_machine = int(200 * ratio_x)
-    y1_machine = int(200 * ratio_y)
+    x1_machine = int(180 * ratio_x)
+    y1_machine = int(169 * ratio_y)
 
-    x2_machine = int(200 * ratio_x)
-    y2_machine = int(400 * ratio_y)
+    x2_machine = int(184 * ratio_x)
+    y2_machine = int(317 * ratio_y)
 
-    x3_machine = int(400 * ratio_x)
-    y3_machine = int(400 * ratio_y)
+    x3_machine = int(470 * ratio_x)
+    y3_machine = int(306 * ratio_y)
     
-    x4_machine = int(400 * ratio_x)
-    y4_machine = int(200 * ratio_y)
+    x4_machine = int(458 * ratio_x)
+    y4_machine = int(165 * ratio_y)
 
     if classes is not None and len(classes) != 0:
         for box, cls, score in zip(boxes, classes, scores):

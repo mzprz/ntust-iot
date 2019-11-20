@@ -8,11 +8,15 @@ from predict import predict, predict_with_yolo_head
 
 INCLUDE_YOLO_HEAD = True
 
-stream = cv2.VideoCapture(0)
+stream = cv2.VideoCapture(1)
 
 inputs = Input(shape=(None, None, 3))
 outputs, config = darknet_base(inputs, include_yolo_head=INCLUDE_YOLO_HEAD)
 model = Model(inputs, outputs)
+
+def onMouse(event, x, y, flags, param):
+    if event == cv2.EVENT_LBUTTONDOWN:
+       print("x = {}, y = {}".format(x, y))
 
 
 while True:
@@ -21,6 +25,7 @@ while True:
     if not grabbed:
         break
 
+    cv2.setMouseCallback('', onMouse)
     # Run detection
     start = time.time()
 
