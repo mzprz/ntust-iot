@@ -2,6 +2,8 @@ import cv2
 import numpy as np
 
 from yolo_head import yolo_head
+import matplotlib.path as mplPath
+import numpy as np
 
 
 def predict(model, orig, config, confidence=0.5, iou_threshold=0.4):
@@ -145,7 +147,20 @@ def draw_boxes(image, boxes, classes, scores, config, file_name=''):
     color_green = (0,255,0)
     color_red = (0,0,255)
     person_inside = False
+    print(ratio_x)
+    print(ratio_y)
     
+    x1_machine = int(200 * ratio_x)
+    y1_machine = int(200 * ratio_y)
+
+    x2_machine = int(200 * ratio_x)
+    y2_machine = int(400 * ratio_y)
+
+    x3_machine = int(400 * ratio_x)
+    y3_machine = int(400 * ratio_y)
+    
+    x4_machine = int(400 * ratio_x)
+    y4_machine = int(200 * ratio_y)
 
     if classes is not None and len(classes) != 0:
         for box, cls, score in zip(boxes, classes, scores):
@@ -160,7 +175,22 @@ def draw_boxes(image, boxes, classes, scores, config, file_name=''):
             x2 = int((x + w) * ratio_x)
             y2 = int((y + h) * ratio_y)
 
-            if y2 <= 1310:
+            x_tengah_bawah = int((x1+x2)/2)
+
+            # point = Point(x_tengah_bawah, y2)
+            # polygon = Polygon([(x1_machine, y1_machine), 
+            #                     (x2_machine, y2_machine), 
+            #                     (x3_machine, y3_machine), 
+            #                     (x4_machine, y4_machine)])
+            # if polygon.contains(point):
+            #     person_inside = True
+            
+            bbPath = mplPath.Path(np.array([[x1_machine, y1_machine],
+                                 [x2_machine, y2_machine],
+                                 [x3_machine, y3_machine],
+                                 [x4_machine, y4_machine]]))
+
+            if bbPath.contains_point((x_tengah_bawah, y2)):
                 person_inside = True
 
             # print(x, y, w, h)
@@ -171,14 +201,14 @@ def draw_boxes(image, boxes, classes, scores, config, file_name=''):
             text = '{0} {1:.2f}'.format(labels[cls], score)
             image = draw_label(image, text, colors[cls], (x1, y1))
 
-    if person_inside:
-        cv2.line(image, (1225, 1300), (2100, 1300), color_red, 5)
-        cv2.line(image, (1260, 1000), (1225, 1300), color_red, 5)
-        cv2.line(image, (1960, 1000), (2100, 1300), color_red, 5)
+    if person_inside: 
+        cv2.line(image, (x2_machine, y2_machine), (x3_machine, y3_machine), color_red, 5) # (x2, y2), (x3, y3)
+        cv2.line(image, (x1_machine, y1_machine), (x2_machine, y2_machine), color_red, 5) # (x1, y1), (x2, y2)
+        cv2.line(image, (x4_machine, y4_machine), (x3_machine, y3_machine), color_red, 5) # (x4, y4), (x3, y3)
     else:
-        cv2.line(image, (1225, 1300), (2100, 1300), color_green, 5)
-        cv2.line(image, (1260, 1000), (1225, 1300), color_green, 5)
-        cv2.line(image, (1960, 1000), (2100, 1300), color_green, 5)
+        cv2.line(image, (x2_machine, y2_machine), (x3_machine, y3_machine), color_green, 5) # (x2, y2), (x3, y3)
+        cv2.line(image, (x1_machine, y1_machine), (x2_machine, y2_machine), color_green, 5) # (x1, y1), (x2, y2)
+        cv2.line(image, (x4_machine, y4_machine), (x3_machine, y3_machine), color_green, 5) # (x4, y4), (x3, y3)
         
     if file_name!='':
         cv2.imwrite("./output_jpg_4/"+file_name, image)

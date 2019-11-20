@@ -8,7 +8,7 @@ from predict import predict, predict_with_yolo_head
 
 INCLUDE_YOLO_HEAD = True
 
-stream = cv2.VideoCapture(1)
+stream = cv2.VideoCapture(0)
 
 inputs = Input(shape=(None, None, 3))
 outputs, config = darknet_base(inputs, include_yolo_head=INCLUDE_YOLO_HEAD)
