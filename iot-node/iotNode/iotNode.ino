@@ -7,20 +7,23 @@
 
 /********************** PIN CONFIGURATION ************************/
 #define pinAlarm D5
-#define pinServo D6
+#define pinServo1 D6
+#define pinServo2 D7
 /*****************************************************************/
 
 /********************* VARIABEL WiFi & MQTT **********************/
 const char* ssid = "SURAKARTAN"; // Nama WiFi
 const char* password = "prasetyo12"; // Password WiFi
-const char* mqtt_server = "192.168.43.110"; // IP address
+const char* mqtt_server = "192.168.43.242"; // IP address
 const int mqtt_port = 1884; // Port MQTT
 WiFiClient espClient;
 PubSubClient client(espClient);
 /*****************************************************************/
 
 /************************* VARIABEL GLOBAL ***********************/
-Servo myservo;
+Servo myservo1;
+Servo myservo2;
+
 DynamicJsonDocument root(1024);
 int pos = 0; // variable to store the servo position
 int stateAlarm = 0;
@@ -65,9 +68,12 @@ void loop() {
 
         // FUNGSI Alarm -------------------------------------------------------
         if(!stateAlarm) {
-                myservo.attach(pinServo);
-                myservo.write(pos);
-                delay(15);
+                myservo1.attach(pinServo1);
+                myservo2.attach(pinServo2);
+                myservo1.write(pos);
+//                delay(10);
+                myservo2.write((pos+180)/2);
+                delay(10);
                 if (clockwise) {
                         if (pos == 180){
                           pos--;
@@ -87,7 +93,8 @@ void loop() {
                 digitalWrite(pinAlarm, LOW);
         }
         else if(stateAlarm) {
-                myservo.detach();
+                myservo1.detach();
+                myservo2.detach();
                 digitalWrite(pinAlarm, HIGH);
         }
 }
